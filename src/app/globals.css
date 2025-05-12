@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-black text-white;
+}
+
+.drop-shadow-glow {
+  text-shadow: 0 0 10px #3b82f6, 0 0 20px #3b82f6;
+}
