@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏋️‍♂️ BADHUNTER — Gamified Fitness Tracker
 
-## Getting Started
+**BADHUNTER** is a dark-themed, solo-leveling-inspired fitness web app that turns your daily workouts and habits into quests. Track your level, manage your progress, and build your ultimate physique — one quest at a time.
 
-First, run the development server:
+> Built with Next.js, TypeScript, and localStorage — no backend needed. Designed for fast performance, clean UX, and game-like motivation.
+
+### 🔗 Live Demo
+👉 https://badhunter-app.vercel.app/
+
+---
+
+## 🚀 Features
+
+- 🎮 Solo Leveling-style daily quest system
+- 📈 Level progress bar (XP from completed quests)
+- 🛑 Strike & punishment logic for missed days
+- 🧠 Persistent data via `localStorage`
+- 🏆 Profile screen: tracks XP, workout days, strikes, and completions
+- ✅ Dynamic 30-day rotating workout plans
+- 🌒 Clean, dark UI with Orbitron font & card layout
+- 📱 Fully responsive layout (mobile-ready)
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/)
+- **Language**: TypeScript
+- **Styling**: Custom CSS + Google Fonts (Orbitron)
+- **State & Storage**: React Hooks + localStorage
+- **Deployment**: [Vercel](https://vercel.com)
+
+---
+
+## 📂 Project Structure
+
+src/
+└── app/
+├── page.tsx          // Landing (name + difficulty)
+├── dashboard/        // Daily quests, XP, strikes
+├── workout/          // Dynamic workouts by day
+└── profile/          // User profile overview
+public/
+└── favicon.ico
+globals.css                // Global styles + font
+tailwind.config.js         // [Not used — switched to custom CSS]
+
+---
+
+## ⚙️ How to Run Locally
 
 ```bash
+git clone https://github.com/your-username/badhunter-app
+cd badhunter-app
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📌 Notes
+	•	This version is front-end only — progress is stored in browser localStorage
+	•	You can enhance this by adding authentication (e.g., Supabase or Firebase)
+	•	Designed to be fast, stylish, and easy to use from any device
