@@ -10,52 +10,94 @@ export default function Home() {
 
   const handleSubmit = () => {
     if (!playerName.trim()) return alert("Enter your name!");
-    // Store the player name and difficulty if needed (e.g., localStorage or context)
+    localStorage.setItem("playerName", playerName);
     router.push("/dashboard");
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-black text-white p-4">
-      <h1 className="text-4xl font-bold text-blue-400 drop-shadow-glow">
-        Welcome to BADHUNTER
-      </h1>
+    <div
+      className="container"
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        className="card"
+        style={{
+          width: "100%",
+          maxWidth: "600px",
+          textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontSize: "2.5rem", marginBottom: "2rem" }}>
+          Welcome to <span style={{ color: "#00aaff" }}>BADHUNTER</span>
+        </h1>
 
-      {/* Difficulty Selector */}
-      <div className="flex gap-4">
-        <button
-          className={`px-4 py-2 rounded border ${
-            difficulty === "beginner" ? "bg-blue-500" : "bg-gray-800"
-          }`}
-          onClick={() => setDifficulty("beginner")}
+        {/* Difficulty Buttons */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "1rem",
+            marginBottom: "1.5rem",
+          }}
         >
-          Beginner
-        </button>
-        <button
-          className={`px-4 py-2 rounded border ${
-            difficulty === "legendary" ? "bg-blue-500" : "bg-gray-800"
-          }`}
-          onClick={() => setDifficulty("legendary")}
-        >
-          Legendary
+          <button
+            style={{
+              background: difficulty === "beginner" ? "#0070f3" : "#333",
+              color: "#fff",
+              padding: "0.6rem 1.2rem",
+              borderRadius: "8px",
+              border: "1px solid #444",
+              cursor: "pointer",
+              flex: 1,
+            }}
+            onClick={() => setDifficulty("beginner")}
+          >
+            Beginner
+          </button>
+          <button
+            style={{
+              background: difficulty === "legendary" ? "#0070f3" : "#333",
+              color: "#fff",
+              padding: "0.6rem 1.2rem",
+              borderRadius: "8px",
+              border: "1px solid #444",
+              cursor: "pointer",
+              flex: 1,
+            }}
+            onClick={() => setDifficulty("legendary")}
+          >
+            Legendary
+          </button>
+        </div>
+
+        {/* Name Input */}
+        <input
+          type="text"
+          placeholder="Enter your player name"
+          value={playerName}
+          onChange={(e) => setPlayerName(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "0.75rem 1rem",
+            marginBottom: "2rem",
+            borderRadius: "8px",
+            border: "1px solid #555",
+            fontSize: "1rem",
+            backgroundColor: "#222",
+            color: "#fff",
+          }}
+        />
+
+        {/* Accept Quest Button */}
+        <button onClick={handleSubmit} style={{ width: "100%" }}>
+          Accept Quest
         </button>
       </div>
-
-      {/* Name Input */}
-      <input
-        type="text"
-        placeholder="Enter your player name"
-        className="px-4 py-2 rounded text-black"
-        value={playerName}
-        onChange={(e) => setPlayerName(e.target.value)}
-      />
-
-      {/* Accept Button */}
-      <button
-        className="px-6 py-3 bg-blue-600 rounded shadow-md hover:bg-blue-700 transition"
-        onClick={handleSubmit}
-      >
-        Accept Quest
-      </button>
-    </main>
+    </div>
   );
 }

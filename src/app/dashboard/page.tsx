@@ -1,63 +1,140 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function DashboardPage() {
   const [quests, setQuests] = useState([
     { id: 1, text: "Drink 2L of water", done: false },
-    { id: 2, text: "Get 8 hours of sleep", done: false },
-    { id: 3, text: "Avoid junk food", done: false },
-    { id: 4, text: "Walk 5,000+ steps", done: false },
-    { id: 5, text: "Stretch for 10 minutes", done: false },
+    { id: 2, text: "Sleep 8 hours", done: false },
+    { id: 3, text: "Stretch 10 minutes", done: false },
+    { id: 4, text: "Eat 100g protein", done: false },
   ]);
 
-  const completedCount = quests.filter((q) => q.done).length;
-  const level = Math.floor((completedCount / quests.length) * 100);
+  const [strikes, setStrikes] = useState(0);
+  const [showWarning, setShowWarning] = useState(false);
+  const [level, setLevel] = useState(0);
+  const [playerName, setPlayerName] = useState("Hunter");
 
-  const toggleQuest = (id: number) => {
+  const toggle = (id: number) => {
     setQuests((prev) =>
       prev.map((q) => (q.id === id ? { ...q, done: !q.done } : q))
     );
   };
 
+  useEffect(() => {
+    const name = localStorage.getItem("playerName") || "Hunter";
+    const lastDate = localStorage.getItem("lastActiveDate");
+    const storedStrikes = parseInt(localStorage.getItem("strikes") || "0");
+    const storedLevel = parseInt(localStorage.getItem("level") || "0");
+
+    const today = new Date().toDateString();
+
+    if (lastDate && lastDate !== today) {
+      const newStrikes = Math.min(3, storedStrikes + 1);
+      setStrikes(newStrikes);
+      setShowWarning(newStrikes >= 3);
+      localStorage.setItem("strikes", newStrikes.toString());
+    } else {
+      setStrikes(storedStrikes);
+    }
+
+    setLevel(storedLevel);
+    setPlayerName(name);
+    localStorage.setItem("lastActiveDate", today);
+  }, []);
+
+  useEffect(() => {
+    const completed = quests.filter((q) => q.done).length;
+    const xp = Math.floor((completed / quests.length) * 100);
+    setLevel(xp);
+    localStorage.setItem("level", xp.toString());
+  }, [quests]);
+
   return (
-    <main className="min-h-screen bg-black text-white p-6 flex flex-col gap-6">
-      <h1 className="text-3xl font-bold text-blue-400 drop-shadow-glow">
-        Dashboard
-      </h1>
+    <div className="container" style={{ paddingTop: "4rem", paddingBottom: "4rem" }}>
+      <div className="card" style={{ textAlign: "center" }}>
+        <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>
+          Welcome back, <span style={{ color: "#00aaff" }}>{playerName}</span>
+        </h1>
+        <p style={{ marginBottom: "2rem" }}>Complete quests daily to level up your character.</p>
 
-      {/* Level Display */}
-      <div className="w-full bg-gray-700 h-4 rounded">
-        <div
-          className="bg-blue-500 h-4 rounded transition-all duration-300"
-          style={{ width: `${level}%` }}
-        ></div>
-      </div>
-      <p>Level progress: {level}%</p>
-
-      {/* Quest List */}
-      <div className="space-y-4">
-        {quests.map((q) => (
-          <div key={q.id} className="flex items-center gap-3">
-            <input
-              type="checkbox"
-              checked={q.done}
-              onChange={() => toggleQuest(q.id)}
-              className="w-5 h-5"
-            />
-            <label>{q.text}</label>
+        {showWarning && (
+          <div
+            style={{
+              backgroundColor: "#ff4444",
+              color: "white",
+              padding: "1rem",
+              borderRadius: "8px",
+              marginBottom: "1rem",
+              fontWeight: "bold",
+            }}
+          >
+            ⚠️ You missed too many days! STRIKE 3. Time for punishment...
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Start Workout Link */}
-      <Link
-        href="/workout"
-        className="mt-8 inline-block px-6 py-3 bg-blue-600 rounded hover:bg-blue-700 transition"
-      >
-        Start Workout
-      </Link>
-    </main>
+        <p style={{ marginBottom: "0.5rem" }}>
+          Completed: {quests.filter((q) => q.done).length} / {quests.length} quests
+        </p>
+        <p style={{ marginBottom: "1rem" }}>Strikes: {strikes} / 3</p>
+
+        {/* XP Progress Bar */}
+        <div
+          style={{
+            background: "#333",
+            borderRadius: "8px",
+            height: "20px",
+            marginBottom: "2rem",
+          }}
+        >
+          <div
+            style={{
+              width: `${level}%`,
+              background: "#0070f3",
+              height: "100%",
+              borderRadius: "8px",
+              transition: "0.3s ease",
+            }}
+          />
+        </div>
+        <p style={{ marginBottom: "2rem" }}>Progress: {level}%</p>
+
+        {/* Quest List */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem" }}>
+          {quests.map((q) => (
+            <div
+              key={q.id}
+              style={{
+                background: "#1e1e1e",
+                padding: "1rem",
+                borderRadius: "10px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span>{q.text}</span>
+              <input
+                type="checkbox"
+                checked={q.done}
+                onChange={() => toggle(q.id)}
+                style={{ transform: "scale(1.2)" }}
+              />
+            </div>
+          ))}
+        </div>
+
+        <Link href="/workout">
+          <button style={{ width: "100%" }}>Start Workout</button>
+        </Link>
+
+        <Link href="/profile">
+          <p style={{ marginTop: "1rem", color: "#00aaff", cursor: "pointer" }}>
+            View Profile →
+          </p>
+        </Link>
+      </div>
+    </div>
   );
 }
